@@ -22,9 +22,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure SSH
+        env:
+          # Stored base64-encoded (single line) to avoid any newline/whitespace
+          # corruption when pasting a multi-line key into the GitHub secret field.
+          DEPLOY_SSH_KEY_B64: ${{ secrets.DEPLOY_SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          echo "$DEPLOY_SSH_KEY_B64" | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "$SERVER_HOST" >> ~/.ssh/known_hosts 2>/dev/null
 
