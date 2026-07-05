@@ -1,0 +1,38 @@
+name: Deploy to production
+
+# Deploy whenever changes land on main (e.g. a merged PR), or on manual trigger.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never run two deploys at once; let an in-flight deploy finish.
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      SERVER_HOST: 145.223.74.120
+      SERVER_USER: root
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$SERVER_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Create source archive
+        run: git archive --format=tar.gz -o /tmp/vali.tar.gz HEAD
+
+      - name: Upload archive to server
+        run: scp -i ~/.ssh/deploy_key /tmp/vali.tar.gz "$SERVER_USER@$SERVER_HOST:/tmp/vali.tar.gz"
+
+      - name: Build and restart on server
+        run: ssh -i ~/.ssh/deploy_key "$SERVER_USER@$SERVER_HOST" 'bash -s' < scripts/remote-deploy.sh
