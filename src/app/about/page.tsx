@@ -61,20 +61,29 @@ export default function AboutPage() {
       </Section>
 
       <Section className="bg-surface">
-        <SectionHeading eyebrow="Our values" title="What we hold ourselves to" align="center" className="mx-auto" />
+        <SectionHeading
+          eyebrow="Our values"
+          title="What we hold ourselves to"
+          align="center"
+          className="mx-auto"
+        />
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {ABOUT_VALUES.map((value, i) => (
             <Reveal key={value.title} delay={i * 0.08}>
               <Card className="h-full text-center">
-                <h3 className="font-heading text-lg font-semibold text-ink">{value.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">{value.description}</p>
+                <h3 className="font-heading text-lg font-semibold text-ink">
+                  {value.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  {value.description}
+                </p>
               </Card>
             </Reveal>
           ))}
         </div>
       </Section>
 
-      <Section>
+      {/* <Section>
         <SectionHeading eyebrow="Leadership" title="The people behind Vali" />
         <div className="mt-12 grid gap-6 sm:grid-cols-3">
           {LEADERSHIP.map((person, i) => (
@@ -87,12 +96,14 @@ export default function AboutPage() {
                   {person.name}
                 </h3>
                 <p className="text-sm text-slate-500">{person.role}</p>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">{person.bio}</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  {person.bio}
+                </p>
               </Card>
             </Reveal>
           ))}
         </div>
-      </Section>
+      </Section> */}
 
       <Section className="bg-white">
         <CtaBand
