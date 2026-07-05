@@ -32,22 +32,24 @@ export const NAV_LINKS = [
   { label: "Industries", href: "/industries" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "Careers", href: "/careers" },
-  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ] as const;
 
 export const ENGAGEMENT_MODELS = [
   {
     title: "Staff Augmentation",
-    description: "Add vetted specialists into a team you already manage, for the skills you need right now.",
+    description:
+      "Add vetted specialists into a team you already manage, for the skills you need right now.",
   },
   {
     title: "Dedicated Team",
-    description: "A committed, motivated squad assembled around your project, with its own cadence and ownership.",
+    description:
+      "A committed, motivated squad assembled around your project, with its own cadence and ownership.",
   },
   {
     title: "Project-Based Delivery",
-    description: "End-to-end delivery against defined scope, timeline, and outcomes.",
+    description:
+      "End-to-end delivery against defined scope, timeline, and outcomes.",
   },
 ];
 
@@ -73,22 +75,26 @@ export const PROCESS_STEPS = [
   {
     icon: Search,
     title: "Discover",
-    description: "We learn your goals, constraints, and the real problem behind the request.",
+    description:
+      "We learn your goals, constraints, and the real problem behind the request.",
   },
   {
     icon: Users2,
     title: "Assemble the right team",
-    description: "We match vetted specialists to your project — not just available bodies.",
+    description:
+      "We match vetted specialists to your project — not just available bodies.",
   },
   {
     icon: Hammer,
     title: "Build & iterate",
-    description: "We ship in tight, transparent cycles so you always know where things stand.",
+    description:
+      "We ship in tight, transparent cycles so you always know where things stand.",
   },
   {
     icon: LifeBuoy,
     title: "Support & scale",
-    description: "We stay in the loop after launch, scaling the team as your needs change.",
+    description:
+      "We stay in the loop after launch, scaling the team as your needs change.",
   },
 ];
 
@@ -109,15 +115,18 @@ export const TESTIMONIAL = {
 export const ABOUT_VALUES = [
   {
     title: "Partnership",
-    description: "We win when our clients win — 'Grow together' is how we engage, not a slogan.",
+    description:
+      "We win when our clients win — 'Grow together' is how we engage, not a slogan.",
   },
   {
     title: "Craftsmanship",
-    description: "We take pride in the details of what we build, not just whether it ships.",
+    description:
+      "We take pride in the details of what we build, not just whether it ships.",
   },
   {
     title: "Reliability",
-    description: "We deliver within the parameters and goals we agree to, every time.",
+    description:
+      "We deliver within the parameters and goals we agree to, every time.",
   },
   {
     title: "Curiosity",
