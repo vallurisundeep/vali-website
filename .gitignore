@@ -39,3 +39,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+vali-inner-pages.md
+vali-website-claude-code-prompt.md
