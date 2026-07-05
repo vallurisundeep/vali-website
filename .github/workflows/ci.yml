@@ -1,0 +1,40 @@
+name: CI
+
+# Build every feature-branch push and every PR into main. When this check is
+# marked "required" on main, a PR cannot be merged unless this build passes.
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Lint
+        run: npm run lint
+
+      # `next build` type-checks the project (generating Next's image/module
+      # type declarations first), so a standalone `tsc` step is both redundant
+      # and wrong here — it would run before next-env.d.ts exists.
+      - name: Build
+        run: npm run build
