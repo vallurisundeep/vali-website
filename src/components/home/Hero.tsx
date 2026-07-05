@@ -17,11 +17,11 @@ const TRUST_ITEMS = [
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-ink text-white">
+    <section className="relative -mt-20 overflow-hidden bg-ink text-white">
       <div className="bg-noise-grid pointer-events-none absolute inset-0 opacity-40" />
       <div className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-primary/20 blur-3xl" />
 
-      <div className="relative mx-auto grid max-w-6xl gap-12 px-6 pt-32 pb-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:pt-40 lg:pb-28">
+      <div className="relative mx-auto grid max-w-6xl gap-12 px-6 pt-52 pb-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:pt-60 lg:pb-28">
         <div>
           <motion.p
             initial={{ opacity: 0, y: 12 }}
