@@ -1,65 +1,121 @@
-import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+import { Hero } from "@/components/home/Hero";
+import { Section } from "@/components/ui/Section";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Card } from "@/components/ui/Card";
+import { ServiceCard } from "@/components/ui/ServiceCard";
+import { StatCard } from "@/components/ui/StatCard";
+import { TestimonialCard } from "@/components/ui/TestimonialCard";
+import { Button } from "@/components/ui/Button";
+import { Reveal } from "@/components/ui/Reveal";
+import { CtaBand } from "@/components/ui/CtaBand";
+import { VALUE_PROPS, SERVICES, PROCESS_STEPS, STATS, TESTIMONIAL } from "@/lib/data";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <>
+      <Hero />
+
+      {/* Value props */}
+      <Section>
+        <SectionHeading
+          eyebrow="Why Vali"
+          title="Consultants who solve the real problem"
+          subtitle="Not just another staffing vendor — a technology partner that understands your business as well as your stack."
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+        <div className="mt-14 grid gap-6 sm:grid-cols-3">
+          {VALUE_PROPS.map((item, i) => (
+            <Reveal key={item.title} delay={i * 0.1}>
+              <Card className="h-full">
+                <span className="font-heading text-3xl font-bold text-primary/30">
+                  0{i + 1}
+                </span>
+                <h3 className="mt-4 font-heading text-lg font-semibold text-ink">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{item.description}</p>
+              </Card>
+            </Reveal>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </Section>
+
+      {/* Services overview */}
+      <Section className="bg-surface">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <SectionHeading
+            eyebrow="What we do"
+            title="End-to-end technology services"
+            subtitle="From a single specialist to a full dedicated team — six ways we help you build and grow."
+          />
+          <Button href="/services" variant="outline" className="shrink-0">
+            All services
+            <ArrowRight size={16} />
+          </Button>
         </div>
-      </main>
-    </div>
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {SERVICES.map((service, i) => (
+            <Reveal key={service.slug} delay={(i % 3) * 0.1}>
+              <ServiceCard
+                icon={service.icon}
+                title={service.title}
+                description={service.shortDescription}
+                href={`/services/${service.slug}`}
+              />
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* How we work */}
+      <Section>
+        <SectionHeading
+          eyebrow="How we work"
+          title="A simple process, built for momentum"
+          align="center"
+          className="mx-auto"
+        />
+        <div className="relative mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="pointer-events-none absolute top-7 right-0 left-0 hidden h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent lg:block" />
+          {PROCESS_STEPS.map((step, i) => (
+            <Reveal key={step.title} delay={i * 0.1} className="relative text-center">
+              <div className="relative mx-auto flex size-14 items-center justify-center rounded-full border border-slate-200 bg-white text-primary shadow-sm">
+                <step.icon size={22} strokeWidth={1.75} />
+              </div>
+              <h3 className="mt-5 font-heading text-base font-semibold text-ink">{step.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">{step.description}</p>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* Stats band */}
+      <Section className="bg-ink text-white">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          {STATS.map((stat, i) => (
+            <Reveal key={stat.label} delay={i * 0.08}>
+              <StatCard value={stat.value} label={stat.label} />
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* Testimonial */}
+      <Section className="bg-surface">
+        <Reveal>
+          <TestimonialCard
+            quote={TESTIMONIAL.quote}
+            name={TESTIMONIAL.name}
+            role={TESTIMONIAL.role}
+          />
+        </Reveal>
+      </Section>
+
+      {/* Final CTA */}
+      <Section className="bg-white">
+        <CtaBand
+          title="Let's build something together."
+          subtitle="Tell us what you're working on and we'll help you find the right people and the right approach."
+        />
+      </Section>
+    </>
   );
 }
