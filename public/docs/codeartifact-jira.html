@@ -89,12 +89,19 @@
   .story h3{font-size:18px;margin:6px 0 8px;font-weight:660;letter-spacing:-.01em}
   .userstory{font-size:14.5px;color:var(--ink-2);margin:0 0 4px;font-style:italic}
   .userstory em{color:var(--accent-2);font-style:normal;font-weight:600}
-  .ac-h{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--ink-3);margin:16px 0 8px}
+  .ac-h{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:16px 0 8px}
+  .ac-count{font-size:11px;letter-spacing:.04em;color:var(--ink-2);background:var(--surface-2);
+    border:1px solid var(--border);border-radius:999px;padding:1px 8px;font-variant-numeric:tabular-nums}
+  .ac-count.complete{color:var(--ok);background:var(--ok-bg);border-color:transparent}
   ul.ac{list-style:none;margin:0;padding:0}
-  ul.ac li{position:relative;padding-left:28px;margin:7px 0;font-size:14.5px;color:var(--ink-2)}
-  ul.ac li::before{content:"";position:absolute;left:0;top:3px;width:16px;height:16px;
-    border:1.5px solid var(--border);border-radius:4px;background:var(--surface-2)}
+  ul.ac li{margin:6px 0;font-size:14.5px;color:var(--ink-2)}
+  ul.ac label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+  ul.ac input[type=checkbox]{margin:2px 0 0;width:16px;height:16px;flex-shrink:0;
+    accent-color:var(--accent);cursor:pointer}
+  ul.ac li.done > label{color:var(--ink-3);text-decoration:line-through;
+    text-decoration-color:var(--ink-3)}
+  ul.ac li.done code{opacity:.6}
   ul.ac li code{font-family:var(--mono);font-size:.86em;background:var(--surface-2);
     padding:1px 5px;border-radius:4px;border:1px solid var(--border);color:var(--ink)}
   .labels{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}
@@ -127,7 +134,7 @@
     <div class="stat"><div class="n">To&nbsp;Do</div><div class="l">Status</div></div>
   </div>
 
-  <div class="epic">
+  <div class="epic" data-key="SHARE-100">
     <span class="badge">◆ Epic</span>
     <h2>Publish shared library to AWS CodeArtifact</h2>
     <div class="key">SHARE-100</div>
@@ -136,113 +143,113 @@
     <p><strong>Value:</strong> governed internal reuse of the already-built library across teams — replacing
       relative imports and avoiding a public registry.</p>
     <div class="dod">
-      <div class="h">Definition of Done</div>
-      <ul>
-        <li>Package published and installable via pnpm from a clean environment.</li>
-        <li>Releases fully automated — no manual publish.</li>
-        <li>Auth works for both CI (OIDC) and local developers.</li>
-        <li>Consumption and contribution documented.</li>
+      <div class="h" style="display:flex;gap:10px;align-items:center">Definition of Done <span class="ac-count"></span></div>
+      <ul class="ac">
+        <li><label><input type="checkbox">Package published and installable via pnpm from a clean environment.</label></li>
+        <li><label><input type="checkbox">Releases fully automated — no manual publish.</label></li>
+        <li><label><input type="checkbox">Auth works for both CI (OIDC) and local developers.</label></li>
+        <li><label><input type="checkbox">Consumption and contribution documented.</label></li>
       </ul>
     </div>
   </div>
 
   <div class="stories">
 
-    <article class="story">
+    <article class="story" data-key="SHARE-101">
       <div class="story-top"><span class="skey">SHARE-101</span><span class="pill todo">To Do</span><span class="pts"><b>5</b> pts</span></div>
       <h3>Provision CodeArtifact domain &amp; npm repository</h3>
       <p class="userstory">As a <em>platform engineer</em> I want a CodeArtifact domain and npm-format repository so that we have a private registry to host the shared library.</p>
-      <div class="ac-h">Acceptance Criteria</div>
+      <div class="ac-h">Acceptance Criteria <span class="ac-count"></span></div>
       <ul class="ac">
-        <li>Domain and repository created via IaC (Terraform / CDK / CloudFormation) — not click-ops.</li>
-        <li>Repository has an upstream to <code>npm-store</code> so transitive deps resolve.</li>
-        <li><code>public:npmjs</code> external connection associated.</li>
-        <li>Repo endpoint, domain and owner documented; retention policy decided or explicitly deferred.</li>
+        <li><label><input type="checkbox">Domain and repository created via IaC (Terraform / CDK / CloudFormation) — not click-ops.</label></li>
+        <li><label><input type="checkbox">Repository has an upstream to <code>npm-store</code> so transitive deps resolve.</label></li>
+        <li><label><input type="checkbox"><code>public:npmjs</code> external connection associated.</label></li>
+        <li><label><input type="checkbox">Repo endpoint, domain and owner documented; retention policy decided or explicitly deferred.</label></li>
       </ul>
       <div class="labels"><span class="label">infra</span><span class="label">codeartifact</span><span class="label">iac</span></div>
     </article>
 
-    <article class="story">
+    <article class="story" data-key="SHARE-102">
       <div class="story-top"><span class="skey">SHARE-102</span><span class="pill todo">To Do</span><span class="pts"><b>5</b> pts</span></div>
       <h3>Define IAM roles &amp; authentication strategy</h3>
       <p class="userstory">As a <em>DevOps engineer</em> I want scoped IAM policies and a token-auth flow so that CI and developers can read/publish securely.</p>
-      <div class="ac-h">Acceptance Criteria</div>
+      <div class="ac-h">Acceptance Criteria <span class="ac-count"></span></div>
       <ul class="ac">
-        <li>Separate policies for read (consumers) and read+publish (CI release role).</li>
-        <li>CI role can call <code>GetAuthorizationToken</code>, <code>GetRepositoryEndpoint</code>, <code>sts:GetServiceBearerToken</code> and publish actions.</li>
-        <li>Token retrieval documented via <code>aws codeartifact get-authorization-token</code>.</li>
-        <li>No long-lived credentials committed anywhere; OIDC preferred for CI.</li>
+        <li><label><input type="checkbox">Separate policies for read (consumers) and read+publish (CI release role).</label></li>
+        <li><label><input type="checkbox">CI role can call <code>GetAuthorizationToken</code>, <code>GetRepositoryEndpoint</code>, <code>sts:GetServiceBearerToken</code> and publish actions.</label></li>
+        <li><label><input type="checkbox">Token retrieval documented via <code>aws codeartifact get-authorization-token</code>.</label></li>
+        <li><label><input type="checkbox">No long-lived credentials committed anywhere; OIDC preferred for CI.</label></li>
       </ul>
       <div class="labels"><span class="label">security</span><span class="label">iam</span><span class="label">oidc</span></div>
     </article>
 
-    <article class="story">
+    <article class="story" data-key="SHARE-103">
       <div class="story-top"><span class="skey">SHARE-103</span><span class="pill todo">To Do</span><span class="pts"><b>3</b> pts</span></div>
       <h3>Configure the package for publishing (pnpm)</h3>
       <p class="userstory">As a <em>library maintainer</em> I want the package configured for the CodeArtifact registry so that <code>pnpm publish</code> targets the right place.</p>
-      <div class="ac-h">Acceptance Criteria</div>
+      <div class="ac-h">Acceptance Criteria <span class="ac-count"></span></div>
       <ul class="ac">
-        <li>Scoped name, <code>version</code>, <code>publishConfig.registry</code>, <code>files</code>, <code>main</code>/<code>module</code>/<code>types</code> and <code>exports</code> set.</li>
-        <li><code>.npmrc</code> uses <code>${CODEARTIFACT_AUTH_TOKEN}</code> from env — token never hard-coded.</li>
-        <li>Published tarball verified via <code>pnpm pack --dry-run</code> to include build output + types.</li>
-        <li>If monorepo: single-package vs <code>pnpm -r publish</code> behavior confirmed.</li>
+        <li><label><input type="checkbox">Scoped name, <code>version</code>, <code>publishConfig.registry</code>, <code>files</code>, <code>main</code>/<code>module</code>/<code>types</code> and <code>exports</code> set.</label></li>
+        <li><label><input type="checkbox"><code>.npmrc</code> uses <code>${CODEARTIFACT_AUTH_TOKEN}</code> from env — token never hard-coded.</label></li>
+        <li><label><input type="checkbox">Published tarball verified via <code>pnpm pack --dry-run</code> to include build output + types.</label></li>
+        <li><label><input type="checkbox">If monorepo: single-package vs <code>pnpm -r publish</code> behavior confirmed.</label></li>
       </ul>
       <div class="flag"><b>⚑ Note:</b> <code>aws codeartifact login --tool npm</code> writes npm config that pnpm may not read — use the <code>${...}</code> token in <code>.npmrc</code>. Most common 401 cause.</div>
       <div class="labels"><span class="label">pnpm</span><span class="label">packaging</span></div>
     </article>
 
-    <article class="story">
+    <article class="story" data-key="SHARE-104">
       <div class="story-top"><span class="skey">SHARE-104</span><span class="pill todo">To Do</span><span class="pts"><b>5</b> pts</span></div>
       <h3>Build a new CI/CD release pipeline</h3>
       <p class="userstory">As a <em>maintainer</em> I want an automated pipeline so that merges/tags publish the library without manual steps.</p>
-      <div class="ac-h">Acceptance Criteria</div>
+      <div class="ac-h">Acceptance Criteria <span class="ac-count"></span></div>
       <ul class="ac">
-        <li>New pipeline runs install → lint → test → build → publish.</li>
-        <li>Authenticates to CodeArtifact via the CI IAM role (OIDC preferred).</li>
-        <li>Publish runs on the release trigger (tag or main merge).</li>
-        <li>Duplicate-version publish (409) fails gracefully without red-failing the run.</li>
+        <li><label><input type="checkbox">New pipeline runs install → lint → test → build → publish.</label></li>
+        <li><label><input type="checkbox">Authenticates to CodeArtifact via the CI IAM role (OIDC preferred).</label></li>
+        <li><label><input type="checkbox">Publish runs on the release trigger (tag or main merge).</label></li>
+        <li><label><input type="checkbox">Duplicate-version publish (409) fails gracefully without red-failing the run.</label></li>
       </ul>
       <div class="labels"><span class="label">ci-cd</span><span class="label">pipeline</span><span class="label">automation</span></div>
     </article>
 
-    <article class="story">
+    <article class="story" data-key="SHARE-105">
       <div class="story-top"><span class="skey">SHARE-105</span><span class="pill todo">To Do</span><span class="pts"><b>3</b> pts</span></div>
       <h3>Automated versioning &amp; release strategy</h3>
       <p class="userstory">As a <em>maintainer</em> I want a defined versioning flow so that versions are consistent and traceable.</p>
-      <div class="ac-h">Acceptance Criteria</div>
+      <div class="ac-h">Acceptance Criteria <span class="ac-count"></span></div>
       <ul class="ac">
-        <li>SemVer strategy chosen (Changesets recommended for pnpm; or semantic-release).</li>
-        <li>Version bump + changelog generation automated.</li>
-        <li>Git tag created per release and linked to the published version.</li>
-        <li>Pre-release / <code>next</code> channel decision documented or deferred.</li>
+        <li><label><input type="checkbox">SemVer strategy chosen (Changesets recommended for pnpm; or semantic-release).</label></li>
+        <li><label><input type="checkbox">Version bump + changelog generation automated.</label></li>
+        <li><label><input type="checkbox">Git tag created per release and linked to the published version.</label></li>
+        <li><label><input type="checkbox">Pre-release / <code>next</code> channel decision documented or deferred.</label></li>
       </ul>
       <div class="labels"><span class="label">versioning</span><span class="label">changesets</span></div>
     </article>
 
-    <article class="story">
+    <article class="story" data-key="SHARE-106">
       <div class="story-top"><span class="skey">SHARE-106</span><span class="pill todo">To Do</span><span class="pts"><b>3</b> pts</span></div>
       <h3>Verify consumption from a downstream project</h3>
       <p class="userstory">As a <em>consumer</em> I want to install the library from CodeArtifact so that we confirm the end-to-end flow works.</p>
-      <div class="ac-h">Acceptance Criteria</div>
+      <div class="ac-h">Acceptance Criteria <span class="ac-count"></span></div>
       <ul class="ac">
-        <li>From a clean environment, configure pnpm against CodeArtifact and <code>pnpm add @yourorg/shared-lib</code>.</li>
-        <li>Import a component/util; confirm types resolve and it builds/runs.</li>
-        <li>Confirm transitive deps resolve via the npm upstream.</li>
-        <li>Any gaps (missing types, bad exports) filed as follow-ups.</li>
+        <li><label><input type="checkbox">From a clean environment, configure pnpm against CodeArtifact and <code>pnpm add @yourorg/shared-lib</code>.</label></li>
+        <li><label><input type="checkbox">Import a component/util; confirm types resolve and it builds/runs.</label></li>
+        <li><label><input type="checkbox">Confirm transitive deps resolve via the npm upstream.</label></li>
+        <li><label><input type="checkbox">Any gaps (missing types, bad exports) filed as follow-ups.</label></li>
       </ul>
       <div class="labels"><span class="label">verification</span><span class="label">e2e</span></div>
     </article>
 
-    <article class="story">
+    <article class="story" data-key="SHARE-107">
       <div class="story-top"><span class="skey">SHARE-107</span><span class="pill todo">To Do</span><span class="pts"><b>5</b> pts</span></div>
       <h3>Documentation &amp; developer onboarding</h3>
       <p class="userstory">As a <em>developer</em> I want clear docs so that I can consume and contribute without tribal knowledge.</p>
-      <div class="ac-h">Acceptance Criteria</div>
+      <div class="ac-h">Acceptance Criteria <span class="ac-count"></span></div>
       <ul class="ac">
-        <li>README/wiki covers registry setup, local <code>.npmrc</code> auth, install and release process.</li>
-        <li>Helper script for local auth-token refresh.</li>
-        <li>Troubleshooting section (expired token, 401/403/409, version conflicts).</li>
-        <li>Links to the operations runbook.</li>
+        <li><label><input type="checkbox">README/wiki covers registry setup, local <code>.npmrc</code> auth, install and release process.</label></li>
+        <li><label><input type="checkbox">Helper script for local auth-token refresh.</label></li>
+        <li><label><input type="checkbox">Troubleshooting section (expired token, 401/403/409, version conflicts).</label></li>
+        <li><label><input type="checkbox">Links to the operations runbook.</label></li>
       </ul>
       <div class="labels"><span class="label">docs</span><span class="label">onboarding</span></div>
     </article>
@@ -253,5 +260,34 @@
 <footer>
   <div class="wrap">Backlog · Epic SHARE-100 · 7 stories · 29 points · Generated 2026-07-06 · Keys &amp; estimates are placeholders</div>
 </footer>
+
+<script>
+(function(){
+  function wire(scope){
+    var key=scope.getAttribute('data-key')||'';
+    var boxes=scope.querySelectorAll('.ac input[type=checkbox]');
+    var badge=scope.querySelector('.ac-count');
+    function paint(){
+      var done=0;
+      boxes.forEach(function(b,i){
+        var li=b.closest('li'); if(li) li.classList.toggle('done',b.checked);
+        if(b.checked) done++;
+      });
+      if(badge){ badge.textContent=done+'/'+boxes.length;
+        badge.classList.toggle('complete',boxes.length>0&&done===boxes.length); }
+    }
+    boxes.forEach(function(b,i){
+      var id='ac:'+key+':'+i;
+      try{ b.checked=localStorage.getItem(id)==='1'; }catch(e){}
+      b.addEventListener('change',function(){
+        try{ localStorage.setItem(id,b.checked?'1':'0'); }catch(e){}
+        paint();
+      });
+    });
+    paint();
+  }
+  document.querySelectorAll('.story,.epic').forEach(wire);
+})();
+</script>
 </body>
 </html>
