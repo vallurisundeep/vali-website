@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JIRA · CodeArtifact Publishing Epic &amp; Stories</title>
+<style>
+  :root{
+    --bg:#F1F4F4; --surface:#FFFFFF; --surface-2:#E9EEEE;
+    --ink:#131A1D; --ink-2:#4C5A60; --ink-3:#7C8A90; --border:#D9E0E1;
+    --accent:#0B7C86; --accent-2:#06585F; --accent-soft:#DCEEF0;
+    --warn:#B45309; --warn-bg:#FBEEDD; --warn-border:#EAD4B0;
+    --ok:#2F7A3E; --ok-bg:#E3F1E6;
+    --epic:#6B4CC0; --epic-bg:#ECE6FA;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --radius:12px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#0D1315; --surface:#131C1F; --surface-2:#1B262A;
+      --ink:#E7EDEE; --ink-2:#9DABB0; --ink-3:#6E7C81; --border:#26343A;
+      --accent:#2FB9C5; --accent-2:#63D2DC; --accent-soft:#123037;
+      --warn:#E0A33A; --warn-bg:#2A2113; --warn-border:#4A3A1C;
+      --ok:#5FB871; --ok-bg:#152A1B;
+      --epic:#A88FE8; --epic-bg:#221B38;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#F1F4F4; --surface:#FFFFFF; --surface-2:#E9EEEE;
+    --ink:#131A1D; --ink-2:#4C5A60; --ink-3:#7C8A90; --border:#D9E0E1;
+    --accent:#0B7C86; --accent-2:#06585F; --accent-soft:#DCEEF0;
+    --warn:#B45309; --warn-bg:#FBEEDD; --warn-border:#EAD4B0;
+    --ok:#2F7A3E; --ok-bg:#E3F1E6; --epic:#6B4CC0; --epic-bg:#ECE6FA;
+  }
+  :root[data-theme="dark"]{
+    --bg:#0D1315; --surface:#131C1F; --surface-2:#1B262A;
+    --ink:#E7EDEE; --ink-2:#9DABB0; --ink-3:#6E7C81; --border:#26343A;
+    --accent:#2FB9C5; --accent-2:#63D2DC; --accent-soft:#123037;
+    --warn:#E0A33A; --warn-bg:#2A2113; --warn-border:#4A3A1C;
+    --ok:#5FB871; --ok-bg:#152A1B; --epic:#A88FE8; --epic-bg:#221B38;
+  }
+
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.6;-webkit-font-smoothing:antialiased;margin:0}
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
+
+  header.top{padding:52px 0 8px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);font-weight:600}
+  h1{font-size:clamp(28px,4vw,42px);line-height:1.1;margin:12px 0 10px;
+    letter-spacing:-.02em;text-wrap:balance;font-weight:700}
+  .sub{font-size:17px;color:var(--ink-2);max-width:62ch;margin:0}
+
+  /* Board summary strip */
+  .summary{display:flex;flex-wrap:wrap;gap:14px;margin:28px 0 8px}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:14px 18px;min-width:120px}
+  .stat .n{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .stat .l{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+
+  /* Epic card */
+  .epic{background:var(--surface);border:1px solid var(--border);border-radius:16px;
+    padding:26px;margin:24px 0 40px;border-left:5px solid var(--epic)}
+  .epic .badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);
+    font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--epic);background:var(--epic-bg);padding:4px 10px;border-radius:6px}
+  .epic h2{font-size:23px;margin:14px 0 8px;letter-spacing:-.01em;font-weight:680}
+  .epic p{color:var(--ink-2);margin:8px 0;font-size:15px}
+  .epic .key{font-family:var(--mono);font-size:12.5px;color:var(--ink-3)}
+  .dod{margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+  .dod .h{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-3);margin-bottom:8px}
+  .dod ul{margin:0;padding-left:20px;color:var(--ink-2);font-size:14.5px}
+  .dod li{margin:4px 0}
+
+  .stories{display:flex;flex-direction:column;gap:18px;margin-bottom:64px}
+  .story{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px 24px;transition:border-color .15s}
+  .story:hover{border-color:var(--accent)}
+  .story-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+  .skey{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--accent-2)}
+  .pill{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;padding:3px 9px;border-radius:5px}
+  .pill.todo{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--border)}
+  .pts{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+  .pts b{color:var(--ink);font-weight:600}
+  .story h3{font-size:18px;margin:6px 0 8px;font-weight:660;letter-spacing:-.01em}
+  .userstory{font-size:14.5px;color:var(--ink-2);margin:0 0 4px;font-style:italic}
+  .userstory em{color:var(--accent-2);font-style:normal;font-weight:600}
+  .ac-h{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-3);margin:16px 0 8px}
+  ul.ac{list-style:none;margin:0;padding:0}
+  ul.ac li{position:relative;padding-left:28px;margin:7px 0;font-size:14.5px;color:var(--ink-2)}
+  ul.ac li::before{content:"";position:absolute;left:0;top:3px;width:16px;height:16px;
+    border:1.5px solid var(--border);border-radius:4px;background:var(--surface-2)}
+  ul.ac li code{font-family:var(--mono);font-size:.86em;background:var(--surface-2);
+    padding:1px 5px;border-radius:4px;border:1px solid var(--border);color:var(--ink)}
+  .labels{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}
+  .label{font-family:var(--mono);font-size:11px;color:var(--ink-2);background:var(--surface-2);
+    border:1px solid var(--border);padding:2px 9px;border-radius:999px}
+  .flag{margin-top:14px;background:var(--warn-bg);border:1px solid var(--warn-border);
+    border-radius:8px;padding:11px 14px;font-size:13.5px;color:var(--ink-2)}
+  .flag b{color:var(--warn)}
+
+  footer{border-top:1px solid var(--border);padding:26px 0 48px;
+    font-size:13px;color:var(--ink-3);font-family:var(--mono)}
+  @media (max-width:560px){.summary{gap:10px}.stat{min-width:calc(50% - 5px)}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">Sprint Backlog · Delivery Plan</div>
+    <h1>Publish Shared Library to AWS CodeArtifact</h1>
+    <p class="sub">One epic and seven stories to take the already-built pnpm library into a private
+      CodeArtifact registry with an automated release pipeline. Story keys and points are placeholders — adjust to your board.</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="summary">
+    <div class="stat"><div class="n">1</div><div class="l">Epic</div></div>
+    <div class="stat"><div class="n">7</div><div class="l">Stories</div></div>
+    <div class="stat"><div class="n">29</div><div class="l">Points</div></div>
+    <div class="stat"><div class="n">To&nbsp;Do</div><div class="l">Status</div></div>
+  </div>
+
+  <div class="epic">
+    <span class="badge">◆ Epic</span>
+    <h2>Publish shared library to AWS CodeArtifact</h2>
+    <div class="key">SHARE-100</div>
+    <p>Publish the existing shared library as a versioned package to a private AWS CodeArtifact npm registry,
+      consumable by downstream projects via pnpm, released through an automated CI/CD pipeline.</p>
+    <p><strong>Value:</strong> governed internal reuse of the already-built library across teams — replacing
+      relative imports and avoiding a public registry.</p>
+    <div class="dod">
+      <div class="h">Definition of Done</div>
+      <ul>
+        <li>Package published and installable via pnpm from a clean environment.</li>
+        <li>Releases fully automated — no manual publish.</li>
+        <li>Auth works for both CI (OIDC) and local developers.</li>
+        <li>Consumption and contribution documented.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stories">
+
+    <article class="story">
+      <div class="story-top"><span class="skey">SHARE-101</span><span class="pill todo">To Do</span><span class="pts"><b>5</b> pts</span></div>
+      <h3>Provision CodeArtifact domain &amp; npm repository</h3>
+      <p class="userstory">As a <em>platform engineer</em> I want a CodeArtifact domain and npm-format repository so that we have a private registry to host the shared library.</p>
+      <div class="ac-h">Acceptance Criteria</div>
+      <ul class="ac">
+        <li>Domain and repository created via IaC (Terraform / CDK / CloudFormation) — not click-ops.</li>
+        <li>Repository has an upstream to <code>npm-store</code> so transitive deps resolve.</li>
+        <li><code>public:npmjs</code> external connection associated.</li>
+        <li>Repo endpoint, domain and owner documented; retention policy decided or explicitly deferred.</li>
+      </ul>
+      <div class="labels"><span class="label">infra</span><span class="label">codeartifact</span><span class="label">iac</span></div>
+    </article>
+
+    <article class="story">
+      <div class="story-top"><span class="skey">SHARE-102</span><span class="pill todo">To Do</span><span class="pts"><b>5</b> pts</span></div>
+      <h3>Define IAM roles &amp; authentication strategy</h3>
+      <p class="userstory">As a <em>DevOps engineer</em> I want scoped IAM policies and a token-auth flow so that CI and developers can read/publish securely.</p>
+      <div class="ac-h">Acceptance Criteria</div>
+      <ul class="ac">
+        <li>Separate policies for read (consumers) and read+publish (CI release role).</li>
+        <li>CI role can call <code>GetAuthorizationToken</code>, <code>GetRepositoryEndpoint</code>, <code>sts:GetServiceBearerToken</code> and publish actions.</li>
+        <li>Token retrieval documented via <code>aws codeartifact get-authorization-token</code>.</li>
+        <li>No long-lived credentials committed anywhere; OIDC preferred for CI.</li>
+      </ul>
+      <div class="labels"><span class="label">security</span><span class="label">iam</span><span class="label">oidc</span></div>
+    </article>
+
+    <article class="story">
+      <div class="story-top"><span class="skey">SHARE-103</span><span class="pill todo">To Do</span><span class="pts"><b>3</b> pts</span></div>
+      <h3>Configure the package for publishing (pnpm)</h3>
+      <p class="userstory">As a <em>library maintainer</em> I want the package configured for the CodeArtifact registry so that <code>pnpm publish</code> targets the right place.</p>
+      <div class="ac-h">Acceptance Criteria</div>
+      <ul class="ac">
+        <li>Scoped name, <code>version</code>, <code>publishConfig.registry</code>, <code>files</code>, <code>main</code>/<code>module</code>/<code>types</code> and <code>exports</code> set.</li>
+        <li><code>.npmrc</code> uses <code>${CODEARTIFACT_AUTH_TOKEN}</code> from env — token never hard-coded.</li>
+        <li>Published tarball verified via <code>pnpm pack --dry-run</code> to include build output + types.</li>
+        <li>If monorepo: single-package vs <code>pnpm -r publish</code> behavior confirmed.</li>
+      </ul>
+      <div class="flag"><b>⚑ Note:</b> <code>aws codeartifact login --tool npm</code> writes npm config that pnpm may not read — use the <code>${...}</code> token in <code>.npmrc</code>. Most common 401 cause.</div>
+      <div class="labels"><span class="label">pnpm</span><span class="label">packaging</span></div>
+    </article>
+
+    <article class="story">
+      <div class="story-top"><span class="skey">SHARE-104</span><span class="pill todo">To Do</span><span class="pts"><b>5</b> pts</span></div>
+      <h3>Build a new CI/CD release pipeline</h3>
+      <p class="userstory">As a <em>maintainer</em> I want an automated pipeline so that merges/tags publish the library without manual steps.</p>
+      <div class="ac-h">Acceptance Criteria</div>
+      <ul class="ac">
+        <li>New pipeline runs install → lint → test → build → publish.</li>
+        <li>Authenticates to CodeArtifact via the CI IAM role (OIDC preferred).</li>
+        <li>Publish runs on the release trigger (tag or main merge).</li>
+        <li>Duplicate-version publish (409) fails gracefully without red-failing the run.</li>
+      </ul>
+      <div class="labels"><span class="label">ci-cd</span><span class="label">pipeline</span><span class="label">automation</span></div>
+    </article>
+
+    <article class="story">
+      <div class="story-top"><span class="skey">SHARE-105</span><span class="pill todo">To Do</span><span class="pts"><b>3</b> pts</span></div>
+      <h3>Automated versioning &amp; release strategy</h3>
+      <p class="userstory">As a <em>maintainer</em> I want a defined versioning flow so that versions are consistent and traceable.</p>
+      <div class="ac-h">Acceptance Criteria</div>
+      <ul class="ac">
+        <li>SemVer strategy chosen (Changesets recommended for pnpm; or semantic-release).</li>
+        <li>Version bump + changelog generation automated.</li>
+        <li>Git tag created per release and linked to the published version.</li>
+        <li>Pre-release / <code>next</code> channel decision documented or deferred.</li>
+      </ul>
+      <div class="labels"><span class="label">versioning</span><span class="label">changesets</span></div>
+    </article>
+
+    <article class="story">
+      <div class="story-top"><span class="skey">SHARE-106</span><span class="pill todo">To Do</span><span class="pts"><b>3</b> pts</span></div>
+      <h3>Verify consumption from a downstream project</h3>
+      <p class="userstory">As a <em>consumer</em> I want to install the library from CodeArtifact so that we confirm the end-to-end flow works.</p>
+      <div class="ac-h">Acceptance Criteria</div>
+      <ul class="ac">
+        <li>From a clean environment, configure pnpm against CodeArtifact and <code>pnpm add @yourorg/shared-lib</code>.</li>
+        <li>Import a component/util; confirm types resolve and it builds/runs.</li>
+        <li>Confirm transitive deps resolve via the npm upstream.</li>
+        <li>Any gaps (missing types, bad exports) filed as follow-ups.</li>
+      </ul>
+      <div class="labels"><span class="label">verification</span><span class="label">e2e</span></div>
+    </article>
+
+    <article class="story">
+      <div class="story-top"><span class="skey">SHARE-107</span><span class="pill todo">To Do</span><span class="pts"><b>5</b> pts</span></div>
+      <h3>Documentation &amp; developer onboarding</h3>
+      <p class="userstory">As a <em>developer</em> I want clear docs so that I can consume and contribute without tribal knowledge.</p>
+      <div class="ac-h">Acceptance Criteria</div>
+      <ul class="ac">
+        <li>README/wiki covers registry setup, local <code>.npmrc</code> auth, install and release process.</li>
+        <li>Helper script for local auth-token refresh.</li>
+        <li>Troubleshooting section (expired token, 401/403/409, version conflicts).</li>
+        <li>Links to the operations runbook.</li>
+      </ul>
+      <div class="labels"><span class="label">docs</span><span class="label">onboarding</span></div>
+    </article>
+
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">Backlog · Epic SHARE-100 · 7 stories · 29 points · Generated 2026-07-06 · Keys &amp; estimates are placeholders</div>
+</footer>
+</body>
+</html>
