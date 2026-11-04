@@ -1,5 +1,8 @@
 # Vali LLC — Marketing Site
 
+<!-- CI/CD verification: auto-deploy on push to main (Vercel) -->
+
+
 Next.js (App Router) + TypeScript + Tailwind CSS marketing site for Vali LLC, an IT consulting and
 staffing firm. Built from `vali-website-claude-code-prompt.md` and `vali-inner-pages.md`.
 
