@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/Button";
 import { HeroGraphic } from "@/components/home/HeroGraphic";
 
 const TRUST_ITEMS = [
-  "Founded 2006",
-  "Plantation, FL",
   "Custom Software",
   "Cloud",
   "Data",
